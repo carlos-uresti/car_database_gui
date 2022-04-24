@@ -19,7 +19,7 @@ car_database.pack()#inflates database notebook
 tab1 = Frame(car_database, width=600, height = 600)
 #add customer tab
 tab2 = Frame(car_database, width=600, height = 600)
-#customer lookup tab
+#customer lookup
 tab3 = Frame(car_database, width=600, height = 600)
 #vehicle lookup tab
 tab4 = Frame(car_database, width=600, height = 600)
@@ -212,7 +212,7 @@ def input_query():
 
   iq_cur = iq_conn.cursor()
 
-  iq_cur.execute("SELECT VehicleID, Description, Year, Type, Category FROM VEHICLE WHERE VehicleID = ? OR Description = ? OR Year = ? AND Type = ? AND Category = ?",
+  iq_cur.execute("SELECT VehicleID, Description, Year, Type, Category FROM VEHICLE WHERE VehicleID = ? OR Description = ? OR Year = ? OR Type = ? OR Category = ?",
                 (vehicle_id2.get(), description1.get(), year2.get(), type2.get(), category2.get(),))
   
   #executes search query when list vehicles button is clicked 
@@ -279,9 +279,6 @@ input_qry_btn.grid(row = 8, column =0, columnspan = 2, pady = 10, padx = 10, ipa
 
 ###########################################Book Rental###################################
 
-
-
-
 #list query for vehicles
 def input_query():
   iq_conn = sqlite3.connect('rental.db')
@@ -298,7 +295,7 @@ def input_query():
   
   vehicle3 = StringVar()
   vehicle3.set("Select from results")
-  drop3 = OptionMenu(tab5, vehicle, *output_records3)
+  drop3 = OptionMenu(tab5, vehicle3, *output_records3)
   drop3.grid(row = 10, column =1, columnspan = 2, pady = 10, padx = 10, ipadx = 140)
 
 
@@ -355,8 +352,11 @@ input_qry_btn = Button(tab5, text = 'Search available vehicles', command = input
 input_qry_btn.grid(row = 8, column =0, columnspan = 2, pady = 10, padx = 10, ipadx = 140)
 #results dropdown menu
 
-
 #########################################################################################
+
+
+
+
 
 
 ###########################################Return Rental####################################

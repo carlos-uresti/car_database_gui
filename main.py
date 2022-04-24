@@ -122,8 +122,8 @@ def submit2():
 
 	submit_cur.execute("INSERT INTO CUSTOMER (Name, Phone) VALUES (:Name, :Phone) ",
 		{
-			'Name': customer_name.get(),
-			'Phone': phone_number.get()
+			'Name': customer_name1.get(),
+			'Phone': phone_number1.get()
 		
 		})
   #commit changes
@@ -132,18 +132,18 @@ def submit2():
 	submit_conn.close()
   
 # input fields 
-customer_name = Entry(tab2, width = 30)
-customer_name.grid(row = 0, column = 1, padx = 20)
+customer_name1 = Entry(tab2, width = 30)
+customer_name1.grid(row = 0, column = 1, padx = 20)
 
-phone_number = Entry(tab2, width = 30)
-phone_number.grid(row = 1, column = 1)
+phone_number1 = Entry(tab2, width = 30)
+phone_number1.grid(row = 1, column = 1)
 
 #create labels tab1
-customer_name_label = Label(tab2, text = 'New Customer Name: ')
-customer_name_label.grid(row =0, column = 0)
+customer_name_label1 = Label(tab2, text = 'New Customer Name: ')
+customer_name_label1.grid(row =0, column = 0)
 
-phone_number_label = Label(tab2, text = 'Phone Number: ')
-phone_number_label.grid(row =1, column = 0)
+phone_number_label1 = Label(tab2, text = 'Phone Number: ')
+phone_number_label1.grid(row =1, column = 0)
 
 #add customer button 
 submit_btn = Button(tab2, text ='Add Customer ', command = submit2)
@@ -162,16 +162,16 @@ def input_query2():
 	iq_cur = iq_conn.cursor()
 
 	iq_cur.execute("SELECT Name, Phone FROM CUSTOMER WHERE Name = ? OR Phone = ?",
-                (customer_name.get(), phone_number.get(),))
+                (customer_name2.get(), phone_number2.get(),))
   
   #executes search query when list vehicles button is clicked 
-	output_records = iq_cur.fetchall()
+	output_records1 = iq_cur.fetchall()
 
 	print_record = ''
   
 #print records found
-	for output_record in output_records:
-		print_record += str(str(output_record[0])+ " " + output_record[1]+ " " +"\n")
+	for output_record1 in output_records1:
+		print_record += str(str(output_record1[0])+ " " + output_record1[1]+ " " +"\n")
 
 	iq_label = Label(tab3, text = print_record)
 
@@ -184,18 +184,18 @@ def input_query2():
 	iq_conn.close()
 
   # input fields 
-customer_name = Entry(tab3, width = 30)
-customer_name.grid(row = 0, column = 1, padx = 20)
+customer_name2 = Entry(tab3, width = 30)
+customer_name2.grid(row = 0, column = 1, padx = 20)
 
-phone_number = Entry(tab3, width = 30)
-phone_number.grid(row = 1, column = 1)
+phone_number2 = Entry(tab3, width = 30)
+phone_number2.grid(row = 1, column = 1)
 
 #create labels tab1
-customer_name_label = Label(tab3, text = 'Customer Name: ')
-customer_name_label.grid(row =0, column = 0)
+customer_name_label2 = Label(tab3, text = 'Customer Name: ')
+customer_name_label2.grid(row =0, column = 0)
 
-phone_number_label = Label(tab3, text = 'Phone Number: ')
-phone_number_label.grid(row =1, column = 0)
+phone_number_label2 = Label(tab3, text = 'Phone Number: ')
+phone_number_label2.grid(row =1, column = 0)
 
 #list customer button 
 input_qry_btn = Button(tab3, text = 'List Customers', command = input_query2)
@@ -216,12 +216,12 @@ def input_query():
                 (vehicle_id2.get(), description1.get(), year2.get(), type2.get(), category2.get(),))
   
   #executes search query when list vehicles button is clicked 
-  output_records = iq_cur.fetchall()
+  output_records2 = iq_cur.fetchall()
   print_record = ''
   
   
 #print records found
-  for output_record in output_records:
+  for output_record in output_records2:
 	  print_record += str(str(output_record[0])+ " " + output_record[1]+ " " + str(output_record[2])+ " " + str(output_record[3])+ " " + str(output_record[4])+"\n")
 
   iq_label = Label(tab4, text = print_record)
@@ -290,7 +290,7 @@ def input_query():
                 (type3.get(), category3.get(), startDate.get(), endDate.get(),))
   
   #executes search query when list vehicles button is clicked 
-  output_records = iq_cur.fetchall()
+  output_records3 = iq_cur.fetchall()
   #commit changes
   iq_conn.commit()
 	#close the DB connection
@@ -298,7 +298,7 @@ def input_query():
   
   vehicle3 = StringVar()
   vehicle3.set("Select from results")
-  drop3 = OptionMenu(tab5, vehicle, *output_records)
+  drop3 = OptionMenu(tab5, vehicle, *output_records3)
   drop3.grid(row = 10, column =1, columnspan = 2, pady = 10, padx = 10, ipadx = 140)
 
 

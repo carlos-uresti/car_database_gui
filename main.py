@@ -61,9 +61,9 @@ def submit():
 		{
 			'VehicleID': vehicle_id.get(),
 			'Description': description.get(),
-			'Year': year.get(),
-			'Type': type.get(),
-			'Category': category.get()
+			'Year': int(year.get()),
+			'Type': int(type.get()),
+			'Category': int(category.get())
 		
 		})
   #commit changes
@@ -316,15 +316,15 @@ endDate.grid(row = 3, column = 1)
 
 #vehicle type drop down menu	
 vehicleTypes = ["1", "2", "3", "4", "5", "6"]
-type = StringVar()
-type.set("Vehicle Type")
+types = StringVar()
+types.set("Vehicle Type")
 drop = OptionMenu(tab5, type, *vehicleTypes)
 drop.grid(column = 1, row=4 )
 
 #vehicle category dropdown menu
 vehicleCategories = ["0", "1"]
-category = StringVar()
-category.set("Vehicle Category")
+categories = StringVar()
+categories.set("Vehicle Category")
 drop2 = OptionMenu(tab5, category, *vehicleCategories)
 drop2.grid(column = 1, row= 5)
 

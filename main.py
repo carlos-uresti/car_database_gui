@@ -120,7 +120,7 @@ def submit2():
 
 	submit_cur = submit_conn.cursor()
 
-	submit_cur.execute("INSERT INTO CUSTOMER VALUES (:Name, :Phone) ",
+	submit_cur.execute("INSERT INTO CUSTOMER (Name, Phone) VALUES (:Name, :Phone) ",
 		{
 			'Name': customer_name.get(),
 			'Phone': phone_number.get()
@@ -289,17 +289,17 @@ def input_query():
   
   #executes search query when list vehicles button is clicked 
   output_records = iq_cur.fetchall()
-  #commit changes
-  iq_conn.commit()
-	#close the DB connection
-  iq_conn.close()
+
   
   vehicle = StringVar()
   vehicle.set("Select from results")
   drop3 = OptionMenu(tab5, vehicle, *output_records)
   drop3.grid(row = 10, column =1, columnspan = 2, pady = 10, padx = 10, ipadx = 140)
 
-
+  #commit changes
+  iq_conn.commit()
+	#close the DB connection
+  iq_conn.close()
 
 # input fields
 customerId = Entry(tab5, width = 30)
@@ -313,6 +313,21 @@ startDate.grid(row = 2, column = 1, padx = 20)
 
 endDate = Entry(tab5, width = 30)
 endDate.grid(row = 3, column = 1)
+
+#vehicle type drop down menu	
+vehicleTypes = ["1", "2", "3", "4", "5", "6"]
+type = StringVar()
+type.set("Vehicle Type")
+drop = OptionMenu(tab5, type, *vehicleTypes)
+drop.grid(column = 1, row=4 )
+
+#vehicle category dropdown menu
+vehicleCategories = ["0", "1"]
+category = StringVar()
+category.set("Vehicle Category")
+drop2 = OptionMenu(tab5, category, *vehicleCategories)
+drop2.grid(column = 1, row= 5)
+
 
 #create labels
 customerId_label = Label(tab5, text = 'Customer ID: ')
@@ -332,20 +347,6 @@ type_label.grid(row =4, column = 0)
 
 category_label = Label(tab5, text = 'Category: ')
 category_label.grid(row =5, column = 0)
-
-#vehicle type drop down menu	
-vehicleTypes = ["1", "2", "3", "4", "5", "6"]
-type = StringVar()
-type.set("Vehicle Type")
-drop = OptionMenu(tab5, type, *vehicleTypes)
-drop.grid(column = 1, row=4 )
-
-#vehicle category dropdown menu
-vehicleCategories = ["0", "1"]
-category = StringVar()
-category.set("Vehicle Category")
-drop2 = OptionMenu(tab5, category, *vehicleCategories)
-drop2.grid(column = 1, row= 5)
 
 
 #create another dropdown that displays results in a select menu rather than print them

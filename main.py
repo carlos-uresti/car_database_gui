@@ -62,8 +62,8 @@ def submit():
 			'VehicleID': vehicle_id.get(),
 			'Description': description.get(),
 			'Year': int(year.get()),
-			'Type': int(type.get()),
-			'Category': int(category.get())
+			'Type': int(type1.get()),
+			'Category': int(category1.get())
 		
 		})
   #commit changes
@@ -81,11 +81,11 @@ description.grid(row = 1, column = 1)
 year= Entry(tab1, width = 30)
 year.grid(row = 2, column = 1)
 
-type = Entry(tab1, width = 30)
-type.grid(row = 3, column = 1)
+type1 = Entry(tab1, width = 30)
+type1.grid(row = 3, column = 1)
 
-category = Entry(tab1, width = 30)
-category.grid(row = 4, column = 1)
+category1 = Entry(tab1, width = 30)
+category1.grid(row = 4, column = 1)
 
 #create labels tab1
 vehicle_id_label = Label(tab1, text = 'VIN: ')
@@ -97,11 +97,11 @@ description_label.grid(row =1, column = 0)
 year_label = Label(tab1, text = 'Year: ')
 year_label.grid(row =2, column = 0)
 
-type_label = Label(tab1, text = 'Type: ')
-type_label.grid(row =3, column = 0)
+type_label1 = Label(tab1, text = 'Type: ')
+type_label1.grid(row =3, column = 0)
 
-category_label = Label(tab1, text = 'Category: ')
-category_label.grid(row =4, column = 0)
+category_label1 = Label(tab1, text = 'Category: ')
+category_label1.grid(row =4, column = 0)
 
 #add vehicle button 
 submit_btn = Button(tab1, text ='Add Vehicle ', command = submit)
@@ -212,8 +212,8 @@ def input_query():
 
   iq_cur = iq_conn.cursor()
 
-  iq_cur.execute("SELECT VehicleID, Description, Year, Type, Category FROM VEHICLE WHERE VehicleID = ? OR Description = ? OR Year = ? OR Type = ? OR Category = ?",
-                (vehicle_id.get(), description.get(), year.get(), type.get(), category.get(),))
+  iq_cur.execute("SELECT VehicleID, Description, Year, Type, Category FROM VEHICLE WHERE VehicleID = ? OR Description = ? OR Year = ? AND Type = ? AND Category = ?",
+                (vehicle_id.get(), description.get(), year.get(), type2.get(), category2.get(),))
   
   #executes search query when list vehicles button is clicked 
   output_records = iq_cur.fetchall()
@@ -247,11 +247,11 @@ description.grid(row = 1, column = 1)
 year= Entry(tab4, width = 30)
 year.grid(row = 2, column = 1)
 
-type = Entry(tab4, width = 30)
-type.grid(row = 3, column = 1)
+type2 = Entry(tab4, width = 30)
+type2.grid(row = 3, column = 1)
 
-category = Entry(tab4, width = 30)
-category.grid(row = 4, column = 1)
+category2 = Entry(tab4, width = 30)
+category2.grid(row = 4, column = 1)
 
 #create labels
 vehicle_id_label = Label(tab4, text = 'VIN: ')
@@ -263,11 +263,11 @@ description_label.grid(row =1, column = 0)
 year_label = Label(tab4, text = 'Year: ')
 year_label.grid(row =2, column = 0)
 
-type_label = Label(tab4, text = 'Type: ')
-type_label.grid(row =3, column = 0)
+type_label2 = Label(tab4, text = 'Type: ')
+type_label2.grid(row =3, column = 0)
 
-category_label = Label(tab4, text = 'Category: ')
-category_label.grid(row =4, column = 0)
+category_label2 = Label(tab4, text = 'Category: ')
+category_label2.grid(row =4, column = 0)
 
 
 input_qry_btn = Button(tab4, text = 'List Vehicles', command = input_query)
@@ -280,26 +280,28 @@ input_qry_btn.grid(row = 8, column =0, columnspan = 2, pady = 10, padx = 10, ipa
 ###########################################Book Rental###################################
 
 
+
+
 #list query for vehicles
 def input_query():
   iq_conn = sqlite3.connect('rental.db')
   iq_cur = iq_conn.cursor()
   iq_cur.execute("SELECT v.VehicleID, v.Description, v.Year, v.Type, v.Category FROM VEHICLE v, RENTAL r WHERE v.Type = ? AND v.Category = ? AND r.StartDate <= ? AND r.ReturnDate <= ? GROUP BY v.VehicleID",
-                (type.get(), category.get(), startDate.get(), endDate.get(),))
+                (type3.get(), category3.get(), startDate.get(), endDate.get(),))
   
   #executes search query when list vehicles button is clicked 
   output_records = iq_cur.fetchall()
-
+  #commit changes
+  iq_conn.commit()
+	#close the DB connection
+  iq_conn.close()
   
   vehicle = StringVar()
   vehicle.set("Select from results")
   drop3 = OptionMenu(tab5, vehicle, *output_records)
   drop3.grid(row = 10, column =1, columnspan = 2, pady = 10, padx = 10, ipadx = 140)
 
-  #commit changes
-  iq_conn.commit()
-	#close the DB connection
-  iq_conn.close()
+
 
 # input fields
 customerId = Entry(tab5, width = 30)
@@ -314,21 +316,6 @@ startDate.grid(row = 2, column = 1, padx = 20)
 endDate = Entry(tab5, width = 30)
 endDate.grid(row = 3, column = 1)
 
-#vehicle type drop down menu	
-vehicleTypes = ["1", "2", "3", "4", "5", "6"]
-types = StringVar()
-types.set("Vehicle Type")
-drop = OptionMenu(tab5, type, *vehicleTypes)
-drop.grid(column = 1, row=4 )
-
-#vehicle category dropdown menu
-vehicleCategories = ["0", "1"]
-categories = StringVar()
-categories.set("Vehicle Category")
-drop2 = OptionMenu(tab5, category, *vehicleCategories)
-drop2.grid(column = 1, row= 5)
-
-
 #create labels
 customerId_label = Label(tab5, text = 'Customer ID: ')
 customerId_label.grid(row =0, column = 0)
@@ -342,17 +329,30 @@ startDate_label.grid(row =2, column = 0)
 endDate_label = Label(tab5, text = 'End Date: ')
 endDate_label.grid(row =3, column = 0)
 
-type_label = Label(tab5, text = 'Type: ')
-type_label.grid(row =4, column = 0)
+type_label3 = Label(tab5, text = 'Type: ')
+type_label3.grid(row =4, column = 0)
 
-category_label = Label(tab5, text = 'Category: ')
-category_label.grid(row =5, column = 0)
+category_label3 = Label(tab5, text = 'Category: ')
+category_label3.grid(row =5, column = 0)
+
+#vehicle type drop down menu	
+vehicleTypes = ["1", "2", "3", "4", "5", "6"]
+type3 = StringVar()
+type3.set("Vehicle Type")
+drop = OptionMenu(tab5, type3, *vehicleTypes)
+drop.grid(column = 1, row=4 )
+
+#vehicle category dropdown menu
+vehicleCategories = ["0", "1"]
+category3 = StringVar()
+category3.set("Vehicle Category")
+drop2 = OptionMenu(tab5, category3, *vehicleCategories)
+drop2.grid(column = 1, row= 5)
 
 
 #create another dropdown that displays results in a select menu rather than print them
 input_qry_btn = Button(tab5, text = 'Search available vehicles', command = input_query)
 input_qry_btn.grid(row = 8, column =0, columnspan = 2, pady = 10, padx = 10, ipadx = 140)
-
 #results dropdown menu
 
 

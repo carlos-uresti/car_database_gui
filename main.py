@@ -337,12 +337,7 @@ def calcTotal(event):
   iq_conn.commit()
 	#close the DB connection
   iq_conn.close()
-  print(carType)
-  print(category)
-  print(rentalType)
-  print(quantity.get())
-  print(arr[0])
-  print(int(arr[0]) * int(quantity.get()))
+  payDate.set("Total = " + str(int(arr[0]) * int(quantity.get())))
 
 def reserve_query():
 

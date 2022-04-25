@@ -295,20 +295,44 @@ payDate = StringVar()
 vehicle3 =StringVar()
 
 def calcTotal(event):
-  global carType
-  global category
+  carType = type3.get()
+  category = category3.get()
   rentalType = rentalType4.get()
+  if carType == 'Compact': 
+    carType = "1" 
+
+  elif carType == "Medium": 
+    carType = "2"
+
+  elif carType == "Large": 
+    carType = "3" 
+    
+  elif carType == "SUV": 
+    carType = "4"
+     
+  elif carType == "Truck": 
+    carType = "5"
+
+  elif carType == "VAN": 
+    carType = "6"  
+
+  if category == 'Basic': 
+    category = "0" 
+
+  elif category == "Luxury": 
+    category = "1"
+
   iq_conn = sqlite3.connect('rental.db')
   iq_cur = iq_conn.cursor()
   if rentalType == "Weekly":
     iq_cur.execute("SELECT Weekly FROM RATE WHERE Type = ? AND Category = ?",
-                  (type3.get(), category3.get(),))
+                  (carType, category,))
   elif rentalType == "Daily":
     iq_cur.execute("SELECT Daily FROM RATE WHERE Type = ? AND Category = ?",
-                  (carType.get(), category.get(),))  
+                  (carType, category,))  
   #executes search query when list vehicles button is clicked 
   rates = iq_cur.fetchall()
-  
+  arr = rates[0]
   #commit changes
   iq_conn.commit()
 	#close the DB connection
@@ -316,7 +340,9 @@ def calcTotal(event):
   print(carType)
   print(category)
   print(rentalType)
-  print(rates)
+  print(quantity.get())
+  print(arr[0])
+  print(int(arr[0]) * int(quantity.get()))
 
 def reserve_query():
 

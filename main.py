@@ -294,7 +294,10 @@ payDate = StringVar()
 
 vehicle3 =StringVar()
 
+total = IntVar()
+
 def calcTotal(event):
+  global total
   carType = type3.get()
   category = category3.get()
   rentalType = rentalType4.get()
@@ -337,48 +340,52 @@ def calcTotal(event):
   iq_conn.commit()
 	#close the DB connection
   iq_conn.close()
-  payDate.set("Total = " + str(int(arr[0]) * int(quantity.get())))
+  
+  #calculate total amount for rental and place it in label
+  total = int(arr[0]) * int(quantity.get())
+  
+  payDate.set("Total = " + str(total))
 
 def reserve_query():
 
-  retanlType = rentalType4.get()
+  global vehicle3
+  arr = vehicle3.get().split(',')
+  VIN = arr[0].split('(')
+  VIN = VIN[1]
+  
+  
+  print("Total", total)
+  #weekly or daily rental, convert to numeric representation
+  rentalType = rentalType4.get()
   
   if rentalType == "Daily":
     rentalType = "1"
   elif rentalType == "Weekly": 
     rentalType = "7"
-    
-  settleDate = payDate.get()
+
+  #answer to whether cusomter wants to pay today or on return of vehicle
   
-  if(settleDate == "Pay Today"):
-    settleDate == orderDate.get()
-  elif settleDate == "Pay On Return":
-    settleDate = NULL
+  
     
- #  submit_conn = sqlite3.connect('rental.db')
- #  submit_cur = submit_conn.cursor()
- #  submit_cur.execute("INSERT INTO RENTAL VALUES (:CustID, :VehicleID, :StartDate, :OrderDate, :RentalType, :Qty, :ReturnDate, :TotalAmout, PaymentDate) ",
-	# 	{
-	# 		'CustID': customerId.get(),
-	# 		'VehicleID': VIN.get(),
-	# 		'StardDate': startDate.get(),
-	# 		'OrderDate': orderDate.get(),
-	# 		'RentalType': rentalType,
- #      'Qty': quantity.get(),
- #      'ReturnDate': endDate.get(),
- #      'TotalAmount': category1.get(),
- #      'PaymentDate': settleDate
-		
-	# 	})
- #  #commit changes
- #  submit_conn.commit()
-	# #close the DB connection
- #  submit_conn.close()
-  global vehicle3
-  arr = vehicle3.get().split(',')
-  VIN = arr[0].split('(')
-  VIN = VIN[1]
-  print(VIN)
+  submit_conn = sqlite3.connect('rental.db')
+  submit_cur = submit_conn.cursor()
+  submit_cur.execute("INSERT INTO RENTAL VALUES (:CustID, :VehicleID, :StartDate, :OrderDate, :RentalType, :Qty, :ReturnDate, :TotalAmount, :PaymentDate) ",
+		{
+			'CustID': customerId.get(),
+			'VehicleID': VIN,
+			'StartDate': startDate.get(),
+			'OrderDate': orderDate.get(),
+			'RentalType': rentalType,
+      'Qty': quantity.get(),
+      'ReturnDate': endDate.get(),
+      'TotalAmount': total,
+      'PaymentDate': orderDate.get(),
+		})
+  #commit changes
+  submit_conn.commit()
+	#close the DB connection
+  submit_conn.close()
+  
 
 
 

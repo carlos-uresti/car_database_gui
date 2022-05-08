@@ -13,6 +13,7 @@ def returnRental():
     iq_conn = sqlite3.connect('rental.db')
 
     #if Customer Name field is populated, retreive ID for that customer
+   
       
     
     iq_cur = iq_conn.cursor()

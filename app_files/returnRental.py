@@ -5,6 +5,7 @@ from tkinter import *
 from tkinter import ttk
 from tabs import *
 
+customerId = IntVar()
 
 def returnRental():
   #list query for vehicles
@@ -13,15 +14,23 @@ def returnRental():
     iq_conn = sqlite3.connect('rental.db')
 
     #if Customer Name field is populated, retreive ID for that customer
-   
-      
+    if(customer_name.get() != ""):
+      iq_cur = iq_conn.cursor()
+      iq_cur.execute("SELECT  CustID FROM VEHICLE WHERE Name = ?", (customer_name.get(),))
+    
+    output_records = iq_cur.fetchall()
+    customerId = output_record[0]
+    print(customerId)  
+    #commit changes
+    iq_conn.commit()
+    
+  	#close the DB connection
+    iq_conn.close() 
     
     iq_cur = iq_conn.cursor()
-    if(vehicle_id2.get() == "" and description1.get() == "" and year2.get()  == "" and type2.get() == "" and category2.get() == ""):
-      iq_cur.execute("SELECT * FROM VEHICLE")
-    else:
-      iq_cur.execute("SELECT VehicleID, Description, Year, Type, Category FROM VEHICLE WHERE VehicleID = ? OR Description = ? OR Year = ? OR Type = ? OR Category = ?",
-                    (vehicle_id2.get(), description1.get(), year2.get(), type2.get(), category2.get(),))
+  
+    iq_cur.execute("SELECT V.VehicleID, V.Description, V.Year, V.Type, V.Category FROM VEHICLE V, RENTAL R WHERE (R.VehicleID = V.VehicleID) AND CustID = ?",
+                    (vehicle_id2.get(), description1.get(), year2.get(), type2.get(), category2.get(), customerId))
     
     #executes search query when list vehicles button is clicked 
     output_records2 = iq_cur.fetchall()

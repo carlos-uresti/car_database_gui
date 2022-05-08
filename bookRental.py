@@ -105,9 +105,9 @@ def bookRental():
       rentalType = "7"
     dateOfPay = payDateChoice.get()
     if dateOfPay == "Pay Today":
-      turnIn = orderDate.get()
-    elif dateOfPay == "Pay On Return":
       turnIn = "NULL"
+    elif dateOfPay == "Pay On Return":
+      turnIn = orderDate.get()
     #answer to whether cusomter wants to pay today or on return of vehicle
  
     

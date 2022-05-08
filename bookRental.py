@@ -11,11 +11,24 @@ vehicle3 =StringVar()
   
 total = IntVar()
 
+dateOfPay = StringVar()
+
+turnIn = StringVar()
+
+value = StringVar()
 def bookRental():
- 
-  
+  global dateOfPay
+  global turnIn
+  global total
+  global vehicle3
+  global payDate
+  ################### calculate total for rental ##################
   def calcTotal(event):
+    global dateOfPay
+    global turnIn
     global total
+    global vehicle3
+    global payDate
     carType = type3.get()
     category = category3.get()
     rentalType = rentalType4.get()
@@ -61,12 +74,22 @@ def bookRental():
     
     #calculate total amount for rental and place it in label
     total = int(arr[0]) * int(quantity.get())
-    
-    payDate.set("Total = " + str(total))
   
+    #set total here  
+    value = "$" + str(total)
+       
+    
+    total_value = Label(tab5, text = value)
+    total_value.grid(row = 12,  column =  1)
+
+  ###################### reserve  vehicle ###########################
   def reserve_query():
   
+    global dateOfPay
+    global turnIn
+    global total
     global vehicle3
+    global payDate
     arr = vehicle3.get().split(',')
     VIN = arr[0].split('(')
     VIN = VIN[1].replace("'", "")
@@ -80,11 +103,14 @@ def bookRental():
       rentalType = "1"
     elif rentalType == "Weekly": 
       rentalType = "7"
-  
+    dateOfPay = payDateChoice.get()
+    if dateOfPay == "Pay Today":
+      turnIn = orderDate.get()
+    elif dateOfPay == "Pay On Return":
+      turnIn = "NULL"
     #answer to whether cusomter wants to pay today or on return of vehicle
+ 
     
-    
-      
     submit_conn = sqlite3.connect('rental.db')
     submit_cur = submit_conn.cursor()
     submit_cur.execute("INSERT INTO RENTAL VALUES (:CustID, :VehicleID, :StartDate, :OrderDate, :RentalType, :Qty, :ReturnDate, :TotalAmount, :PaymentDate) ",
@@ -97,21 +123,25 @@ def bookRental():
         'Qty': quantity.get(),
         'ReturnDate': endDate.get(),
         'TotalAmount': total,
-        'PaymentDate': orderDate.get(),
+        'PaymentDate': turnIn,
   		})
     #commit changes
     submit_conn.commit()
   	#close the DB connection
     submit_conn.close()
     
-  
-  
-  
   #list query for vehicles
   carType = StringVar()
   category = StringVar()
-  
+
+  ######## search for avilable vehicles #################
   def input_query():
+    global dateOfPay
+    global turnIn
+    global total
+    global vehicle3
+    global payDate
+
     
     carType = type3.get()
     category = category3.get()
@@ -153,15 +183,19 @@ def bookRental():
   	#close the DB connection
     iq_conn.close()
     
-    vehicle3.set("Select from results")
-    drop3 = OptionMenu(tab5, vehicle3, *output_records3)
-    drop3.grid(row = 9, column =1, columnspan = 2, pady = 5, padx = 10, ipadx = 100)
   
-    payOptions = ["Pay Today", "Pay On Return"]
+    # #calculate total here and place in a label
+    # payOptions = ["Pay Today", "Pay On Return"]
+    # payDate.set("Ca")
+    # payDrop = OptionMenu(tab5, payDate, *payOptions, command = calcTotal)
+    # payDrop.grid(row = 10, column =1, columnspan = 2, pady = 5, padx = 10, ipadx = 100)
     
-    payDate.set("Pay Now or Later")
-    payDrop = OptionMenu(tab5, payDate, *payOptions, command = calcTotal)
-    payDrop.grid(row = 11, column =1, columnspan = 2, pady = 5, padx = 10, ipadx = 100)
+    vehicle3.set("Select from results")
+    drop3 = OptionMenu(tab5, vehicle3, *output_records3, command = calcTotal)
+    drop3.grid(row = 11, column =1, columnspan = 2, pady = 5, padx = 10, ipadx = 100)
+
+ 
+
     
     reserve_qry_btn = Button(tab5, text = 'Reserve Vehicle', command = reserve_query)
     reserve_qry_btn.grid(row = 13, column =1, columnspan = 1, pady = 10, padx = 5, ipadx = 100)
@@ -194,15 +228,22 @@ def bookRental():
   drop2 = OptionMenu(tab5, category3, *vehicleCategories)
   drop2.grid(column = 1, row= 5)
   
-  #vehicle category dropdown menu
+  #vehicle rental type dropdown menu
   vehicleRentalType = ["Daily", "Weekly"]
   rentalType4 = StringVar()
   rentalType4.set("Rental Type")
-  drop2 = OptionMenu(tab5, rentalType4, *vehicleRentalType)
-  drop2.grid(column = 1, row= 6)
+  drop3 = OptionMenu(tab5, rentalType4, *vehicleRentalType)
+  drop3.grid(column = 1, row= 6)
+
+  #pay date choice
+  rentalPayChoice = ["Pay Today", "Pay On Return"]
+  payDateChoice = StringVar()
+  payDateChoice.set("When To Pay")
+  drop4 = OptionMenu(tab5, payDateChoice, *rentalPayChoice)
+  drop4.grid(column = 1, row= 7)
   
   quantity = Entry(tab5, width = 30)
-  quantity.grid(row = 7, column = 1)
+  quantity.grid(row = 8, column = 1)
   
   #create labels
   customerId_label = Label(tab5, text = 'Customer ID: ')
@@ -227,9 +268,12 @@ def bookRental():
   vehicle_rental_label.grid(row =6, column = 0)
   
   quantity_label = Label(tab5, text = 'Quantity')
-  quantity_label.grid(row = 7,  column =  0)
+  quantity_label.grid(row = 8,  column =  0)
+
+  total_label = Label(tab5, text = 'Total')
+  total_label.grid(row = 12,  column =  0)
   
   #create another dropdown that displays results in a select menu rather than print them
   input_qry_btn = Button(tab5, text = 'Search available vehicles', command = input_query)
-  input_qry_btn.grid(row = 8, column =1, columnspan = 1, pady = 10, padx = 10, ipadx = 100)
+  input_qry_btn.grid(row = 10, column =1, columnspan = 1, pady = 10, padx = 10, ipadx = 100)
   #results dropdown menu

@@ -5,14 +5,14 @@ from tkinter import *
 from tkinter import ttk
 from tabs import *
 
+payDate = StringVar()
 
+vehicle3 =StringVar()
+  
+total = IntVar()
 
 def bookRental():
-  payDate = StringVar()
-
-  vehicle3 =StringVar()
-  
-  total = IntVar()
+ 
   
   def calcTotal(event):
     global total

@@ -8,6 +8,7 @@ from addCustomer import *
 from listCustomer import *
 from listVehicles import *
 from bookRental import *
+from returnRental import *
 from tabs import *
 
 
@@ -21,5 +22,6 @@ listVehicles()
 
 bookRental()
 
+returnRental()
 
 root.mainloop()

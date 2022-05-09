@@ -27,16 +27,16 @@ def listVehicles():
     
   #print records found
     for output_record in output_records2:
-  	  print_record += str(str(output_record[0])+ " " + output_record[1]+ " " + str(output_record[2])+ " " + str(output_record[3])+ " " + str(output_record[4])+"\n")
+      print_record += str(str(output_record[0])+ " " + output_record[1]+ " " + str(output_record[2])+ " " + str(output_record[3])+ " " + str(output_record[4])+"\n")
   
     iq_label = Label(tab4, text = print_record)
   
     iq_label.grid(row = 9, column = 0, columnspan = 2)
-  	
-  	#commit changes
+    
+    #commit changes
     iq_conn.commit()
     
-  	#close the DB connection
+    #close the DB connection
     iq_conn.close()
   
   

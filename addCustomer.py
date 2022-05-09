@@ -5,24 +5,35 @@ from tkinter import *
 from tkinter import ttk
 from tabs import *
 
+iq_label = Label(root)
 
 def addCustomer():
   #submit new customer info
   def submit2():
-  	submit_conn = sqlite3.connect('rental.db')
-  
-  	submit_cur = submit_conn.cursor()
-  
-  	submit_cur.execute("INSERT INTO CUSTOMER (Name, Phone) VALUES (:Name, :Phone) ",
-  		{
-  			'Name': customer_name1.get(),
-  			'Phone': phone_number1.get()
-  		
-  		})
+    submit_conn = sqlite3.connect('rental.db')
+    print_record = ''
+    submit_cur = submit_conn.cursor()
+    global iq_label
+    iq_label.destroy()
+    
+    try:
+      submit_cur.execute("INSERT INTO CUSTOMER (Name, Phone) VALUES (:Name, :Phone) ",
+        {
+          'Name': customer_name1.get(),
+          'Phone': phone_number1.get()
+        
+        })
+      print_record += f"Customer: {customer_name1.get()} Added Successfully"
+    except sqlite3.OperationalError as msg:
+        print_record += msg
+    
+    iq_label = Label(tab2, text=print_record)
+
+    iq_label.grid(row=8, column=0, columnspan=2)
     #commit changes
-  	submit_conn.commit()
-  	#close the DB connection
-  	submit_conn.close()
+    submit_conn.commit()
+    #close the DB connection
+    submit_conn.close()
     
   # input fields 
   customer_name1 = Entry(tab2, width = 30)

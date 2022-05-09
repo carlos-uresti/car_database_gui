@@ -20,16 +20,16 @@ def listVehicles():
     print_record = ''  # needed to clear
     if(vehicle_id2.get() == "" and description1.get() == "" ):
       Empty = True;
-      iq_cur.execute("select DISTINCT VIN, Vehicle, printf('$%0.2f', OrderAmount / TotalDays) as [DAILY] from vRentalInfo")
+      iq_cur.execute("select VIN, Vehicle, printf('$%0.2f', OrderAmount / TotalDays) as [DAILY] from vRentalInfo")
     else:
       Empty = False;
       vehicle_name_text = description1.get()
       vehicle_id_text = vehicle_id2.get()
       if vehicle_name_text and not vehicle_id_text:
-        iq_cur.execute("select DISTINCT VIN, Vehicle, printf('$%0.2f', OrderAmount / TotalDays) as [DAILY] from vRentalInfo WHERE Vehicle LIKE ?",
+        iq_cur.execute("select VIN, Vehicle, printf('$%0.2f', OrderAmount / TotalDays) as [DAILY] from vRentalInfo WHERE Vehicle LIKE ?",
                       ('%'+vehicle_name_text+'%',))
       elif vehicle_id_text and not vehicle_name_text:
-        iq_cur.execute("select DISTINCT VIN, Vehicle, printf('$%0.2f', OrderAmount / TotalDays) as [DAILY] from vRentalInfo WHERE Vehicle = ?",
+        iq_cur.execute("select VIN, Vehicle, printf('$%0.2f', OrderAmount / TotalDays) as [DAILY] from vRentalInfo WHERE Vehicle = ?",
                       (vehicle_id_text,))
       else:
         print_record += "CAN ONLY SEARCH ONE FILTER\n"

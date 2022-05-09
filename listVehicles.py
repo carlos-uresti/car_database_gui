@@ -6,26 +6,37 @@ from tkinter import ttk
 from tabs import *
 
 
-
+iq_label = Label(root)
 def listVehicles():
   #list query for vehicles
   Empty = False;
   def input_query():
-    
+
+    global iq_label  # needed to clear
+    iq_label.destroy() # needed to clear
     iq_conn = sqlite3.connect('rental.db')
   
     iq_cur = iq_conn.cursor()
+    print_record = ''  # needed to clear
     if(vehicle_id2.get() == "" and description1.get() == "" ):
       Empty = True;
-      iq_cur.execute("select VIN, Vehicle, printf('$%0.2f', OrderAmount / TotalDays) as [DAILY] from vRentalInfo")
+      iq_cur.execute("select DISTINCT VIN, Vehicle, printf('$%0.2f', OrderAmount / TotalDays) as [DAILY] from vRentalInfo")
     else:
       Empty = False;
-      iq_cur.execute("select VIN, Vehicle, printf('$%0.2f', OrderAmount / TotalDays) as [DAILY] from vRentalInfo WHERE VIN = ? OR VEHICLE = ?",
-                    (vehicle_id2.get(), description1.get(),))
+      vehicle_name_text = description1.get()
+      vehicle_id_text = vehicle_id2.get()
+      if vehicle_name_text and not vehicle_id_text:
+        iq_cur.execute("select DISTINCT VIN, Vehicle, printf('$%0.2f', OrderAmount / TotalDays) as [DAILY] from vRentalInfo WHERE Vehicle LIKE ?",
+                      ('%'+vehicle_name_text+'%',))
+      elif vehicle_id_text and not vehicle_name_text:
+        iq_cur.execute("select DISTINCT VIN, Vehicle, printf('$%0.2f', OrderAmount / TotalDays) as [DAILY] from vRentalInfo WHERE Vehicle = ?",
+                      (vehicle_id_text,))
+      else:
+        print_record += "CAN ONLY SEARCH ONE FILTER\n"
     
     #executes search query when list vehicles button is clicked 
     output_records2 = iq_cur.fetchall()
-    print_record = ''
+    
     
     
   #print records found
@@ -33,7 +44,7 @@ def listVehicles():
       if Empty:
   	    print_record += str(str(output_record[0])+ " " + output_record[1]+ " " + str(output_record[2])+ " " + "\n")
       else:
-        print_record += str(str(output_record[0])+ " " + output_record[1]+ str(output_record[2])+ " " + "\n")
+        print_record += str(str(output_record[0])+ " " + output_record[1]+ " " + str(output_record[2])+ " " + "\n")
   
     iq_label = Label(tab4, text = print_record)
   
